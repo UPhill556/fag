@@ -54,9 +54,10 @@
         
         .counter {
             margin-top: 30px;
-            font-size: 26px;
+            font-size: 46px;
             color: #333;
             transition: all 0.8s ease;
+            font-weight: bold;
         }
         
         .green-mode {
@@ -73,16 +74,13 @@
     </style>
 </head>
 <body>
-    <h1 id="title">Clicker Training Simulator 2012 no virus!!1!</h1>
+    <h1 id="title">Clicker Simulator 2012 no virus</h1>
     <button class="click-button" id="clickButton" title="Clicca qui!"></button>
-    <div class="counter">Click: <span id="counter">0</span></div>
+    <div class="counter"><span id="counter">0</span></div>
 
-    <audio id="clickSound" preload="auto">
-        <source src="click.mp3" type="audio/mpeg">
-    </audio>
-    <audio id="greenSound" preload="auto">
-        <source src="green.mp3" type="audio/mpeg">
-    </audio>
+    <!-- Sostituisci questi percorsi con i tuoi file audio locali -->
+    <audio id="clickSound" src="click.mp3" preload="auto"></audio>
+    <audio id="greenSound" src="green.mp3" preload="auto"></audio>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -95,6 +93,7 @@
             
             let count = 0;
             let greenModeActive = false;
+            let winChance = 0.1; // 0.1% di possibilità iniziale
             
             clickButton.addEventListener('click', function() {
                 if (greenModeActive) return;
@@ -102,6 +101,9 @@
                 // Incrementa il contatore
                 count++;
                 counterElement.textContent = count;
+                
+                // Aumenta progressivamente la possibilità di vittoria dello 0.1%
+                winChance += 0.1;
                 
                 // Effetto di pressione sul pulsante
                 clickButton.style.transform = 'scale(0.95)';
@@ -117,22 +119,28 @@
                     console.log("Errore nella riproduzione audio: ", error);
                 }
                 
-                // Effetto al decimo click
-                if (count === 10) {
-                    greenModeActive = true;
-                    
-                    // Riproduci il suono verde
-                    try {
-                        greenSound.currentTime = 0;
-                        greenSound.play().catch(e => console.log("Audio non riproducibile: ", e));
-                    } catch (error) {
-                        console.log("Errore nella riproduzione audio: ", error);
-                    }
-                    
-                    // Attiva la green mode
-                    body.classList.add('green-mode');
+                // Controlla se si attiva la modalità verde (random)
+                const randomValue = Math.random() * 100; // Numero tra 0 e 100
+                
+                if (randomValue <= winChance) {
+                    activateGreenMode();
                 }
             });
+            
+            function activateGreenMode() {
+                greenModeActive = true;
+                
+                // Riproduci il suono verde
+                try {
+                    greenSound.currentTime = 0;
+                    greenSound.play().catch(e => console.log("Audio non riproducibile: ", e));
+                } catch (error) {
+                    console.log("Errore nella riproduzione audio: ", error);
+                }
+                
+                // Attiva la green mode
+                body.classList.add('green-mode');
+            }
             
             // Simula il click se l'utente preme la barra spaziatrice
             document.addEventListener('keydown', function(e) {
