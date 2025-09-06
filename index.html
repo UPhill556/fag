@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clicker Simulator 2012 no virus</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            text-align: center;
+            background-color: white;
+            transition: all 0.8s ease;
+            margin: 0;
+            padding: 20px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        h1 {
+            color: black;
+            font-size: 28px;
+            margin-bottom: 40px;
+            transition: all 0.8s ease;
+        }
+        
+        .click-button {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background-color: #000000;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.3s ease;
+            border: none;
+        }
+        
+        .click-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
+        }
+        
+        .click-button:active {
+            transform: scale(0.95);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .counter {
+            margin-top: 30px;
+            font-size: 26px;
+            color: #333;
+            transition: all 0.8s ease;
+        }
+        
+        .green-mode {
+            background-color: #00ff00; /* Verde lime */
+        }
+        
+        .green-mode h1,
+        .green-mode .counter,
+        .green-mode .click-button {
+            opacity: 0;
+            transform: scale(0);
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="title">Clicker Training Simulator 2012 no virus!!1!</h1>
+    <button class="click-button" id="clickButton" title="Clicca qui!"></button>
+    <div class="counter">Click: <span id="counter">0</span></div>
+
+    <audio id="clickSound" preload="auto">
+        <source src="click.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="greenSound" preload="auto">
+        <source src="green.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const clickButton = document.getElementById('clickButton');
+            const counterElement = document.getElementById('counter');
+            const titleElement = document.getElementById('title');
+            const clickSound = document.getElementById('clickSound');
+            const greenSound = document.getElementById('greenSound');
+            const body = document.body;
+            
+            let count = 0;
+            let greenModeActive = false;
+            
+            clickButton.addEventListener('click', function() {
+                if (greenModeActive) return;
+                
+                // Incrementa il contatore
+                count++;
+                counterElement.textContent = count;
+                
+                // Effetto di pressione sul pulsante
+                clickButton.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    if (!greenModeActive) clickButton.style.transform = 'scale(1)';
+                }, 100);
+                
+                // Riproduci il suono del click
+                try {
+                    clickSound.currentTime = 0;
+                    clickSound.play().catch(e => console.log("Audio non riproducibile: ", e));
+                } catch (error) {
+                    console.log("Errore nella riproduzione audio: ", error);
+                }
+                
+                // Effetto al decimo click
+                if (count === 10) {
+                    greenModeActive = true;
+                    
+                    // Riproduci il suono verde
+                    try {
+                        greenSound.currentTime = 0;
+                        greenSound.play().catch(e => console.log("Audio non riproducibile: ", e));
+                    } catch (error) {
+                        console.log("Errore nella riproduzione audio: ", error);
+                    }
+                    
+                    // Attiva la green mode
+                    body.classList.add('green-mode');
+                }
+            });
+            
+            // Simula il click se l'utente preme la barra spaziatrice
+            document.addEventListener('keydown', function(e) {
+                if (e.code === 'Space' && !greenModeActive) {
+                    e.preventDefault();
+                    clickButton.click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
